@@ -5,14 +5,14 @@ import 'package:glores/welcome.dart';
 import 'package:glores/home.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class RegisterPage extends StatefulWidget {
-  RegisterPage({Key key}) : super(key: key);
+class RegisterBusinessPage extends StatefulWidget {
+  RegisterBusinessPage({Key key}) : super(key: key);
 
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _RegisterBusinessPageState createState() => _RegisterBusinessPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterBusinessPageState extends State<RegisterBusinessPage> {
   //   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   int _value = 0;
   final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
@@ -97,9 +97,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     obscureText: true,
                     validator: pwdValidator,
                   ),
-                  Padding(padding: EdgeInsets.all(11.0),),
-                  Text("Bussines Type:", style: TextStyle(fontSize: 20),),
-                  Padding(padding: EdgeInsets.all(2.0),),
+                  Padding(
+                    padding: EdgeInsets.all(11.0),
+                  ),
+                  Text(
+                    "Bussines Type:",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(2.0),
+                  ),
                   DropdownButton(
                     hint: Text('Select'),
                     value: _value,

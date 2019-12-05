@@ -1,4 +1,5 @@
-import 'package:glores/sign_up.dart';
+import 'package:glores/signUpBusiness.dart';
+import 'package:glores/signUpUser.dart';
 import 'package:flutter/material.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -18,11 +19,11 @@ class _WelcomePageState extends State<WelcomePage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           RaisedButton(
-            onPressed: navigateToSignIn,
+            onPressed: navigateToRegisteUser,
             child: Text('Customer'),
           ),
           RaisedButton(
-            onPressed: navigateToSignUp,
+            onPressed: navigateToRegisterBusiness,
             child: Text('Business Owner'),
           ),
         ],
@@ -30,10 +31,11 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  void navigateToSignIn(){
+  void navigateToRegisteUser(){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterUserPage(), fullscreenDialog: true));
   }
 
-  void navigateToSignUp(){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage(), fullscreenDialog: true));
+  void navigateToRegisterBusiness(){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterBusinessPage(), fullscreenDialog: true));
   }
 }
