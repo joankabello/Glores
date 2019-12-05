@@ -1,0 +1,40 @@
+{
+    "project_info": {
+        "project_number": "675602598635",
+        "firebase_url": "https://glores2022.firebaseio.com",
+        "project_id": "glores2022",
+        "storage_bucket": "glores2022.appspot.com"
+    },
+    "client": [
+        {
+            "client_info": {
+                "mobilesdk_app_id": "1:675602598635:android:62a55be2181b604e244cae",
+                "android_client_info": {
+                    "package_name": "com.example.glores"
+                }
+            },
+            "oauth_client": [
+                {
+                    "client_id": "675602598635-br5a80uko7m1r83ai3p43gvh6sfve3kn.apps.googleusercontent.com",
+                    "client_type": 3
+                }
+            ],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyDWXpVXwayBTKgZfWRnBV6Bb-WzUEZ-qeI"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": [
+                        {
+                            "client_id": "675602598635-br5a80uko7m1r83ai3p43gvh6sfve3kn.apps.googleusercontent.com",
+                            "client_type": 3
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "configuration_version": "1"
+}
