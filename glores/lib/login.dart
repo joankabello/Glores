@@ -42,6 +42,9 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  String pwdIncorrect() {
+    return 'Password is incorrect';
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,15 +59,27 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: <Widget>[
                   TextFormField(
+                    maxLines: 1,
                     decoration: InputDecoration(
-                        labelText: 'Email*', hintText: "john.doe@gmail.com"),
+                        labelText: 'Email*',
+                        hintText: "name.lastname@gmail.com",
+                        icon: new Icon(
+                          Icons.lock,
+                          color: Colors.grey,
+                        )),
                     controller: emailInputController,
                     keyboardType: TextInputType.emailAddress,
                     validator: emailValidator,
                   ),
                   TextFormField(
+                    maxLines: 1,
                     decoration: InputDecoration(
-                        labelText: 'Password*', hintText: "********"),
+                        labelText: 'Password*',
+                        hintText: "********",
+                        icon: new Icon(
+                          Icons.email,
+                          color: Colors.grey,
+                        )),
                     controller: pwdInputController,
                     obscureText: true,
                     validator: pwdValidator,
@@ -89,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                                         MaterialPageRoute(
                                             builder: (context) => HomeScreen())))
                                 .catchError((err) => print(err)))
-                            .catchError((err) => print(err));
+                            .catchError((err) => pwdIncorrect);
                       }
                     },
                   ),
@@ -97,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                   FlatButton(
                     child: Text("Register here!"),
                     onPressed: () {
-                      Navigator.pushNamed(context, "/register");
+                      Navigator.pushNamed(context, '/welcome');
                     },
                   )
                 ],

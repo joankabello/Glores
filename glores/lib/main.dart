@@ -5,6 +5,7 @@ import 'package:glores/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:glores/home.dart';
 import 'package:glores/signUpBusiness.dart';
+import 'package:glores/login.dart';
 import 'package:glores/screens/home_screen.dart';
 
 
@@ -21,9 +22,10 @@ class MyApp extends StatelessWidget {
         accentColor: Color(0xFFD8ECF1),
         scaffoldBackgroundColor: Color(0xFFF3F5F7),
         ),
-        home: WelcomePage(),
+        home: LoginPage(),
         routes: <String, WidgetBuilder>{
           '/home': (BuildContext context) => HomeScreen(),
+          '/welcome': (BuildContext context) => WelcomePage(),
           '/registerUser': (BuildContext context) => RegisterUserPage(),
           '/registerBussines': (BuildContext context) => RegisterBusinessPage(),
         });
