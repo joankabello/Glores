@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:glores/home.dart';
+import 'package:glores/screens/home_screen.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -86,11 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => HomePage(
-                                                  title: result["fname"] +
-                                                      "'s Tasks",
-                                                  uid: currentUser.uid,
-                                                ))))
+                                            builder: (context) => HomeScreen())))
                                 .catchError((err) => print(err)))
                             .catchError((err) => print(err));
                       }

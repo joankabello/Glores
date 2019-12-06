@@ -1,9 +1,12 @@
+import 'package:glores/models/Buses.dart';
 import 'package:glores/signUpUser.dart';
 import 'package:glores/splash.dart';
 import 'package:glores/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:glores/home.dart';
 import 'package:glores/signUpBusiness.dart';
+import 'package:glores/screens/home_screen.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -14,10 +17,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
+        primaryColor: Color(0xFF3EBACE),
+        accentColor: Color(0xFFD8ECF1),
+        scaffoldBackgroundColor: Color(0xFFF3F5F7),
         ),
         home: WelcomePage(),
         routes: <String, WidgetBuilder>{
-          '/home': (BuildContext context) => HomePage(title: 'Home'),
+          '/home': (BuildContext context) => HomeScreen(),
           '/registerUser': (BuildContext context) => RegisterUserPage(),
           '/registerBussines': (BuildContext context) => RegisterBusinessPage(),
         });

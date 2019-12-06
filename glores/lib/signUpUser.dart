@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:glores/screens/home_screen.dart';
 import 'package:glores/welcome.dart';
 import 'package:glores/home.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -124,13 +125,8 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                                       Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => HomePage(
-                                                    title:
-                                                        firstNameInputController
-                                                                .text +
-                                                            "'s Tasks",
-                                                    uid: currentUser.uid,
-                                                  )),
+                                              builder: (context) =>
+                                                  HomeScreen()),
                                           (_) => false),
                                       firstNameInputController.clear(),
                                       lastNameInputController.clear(),
