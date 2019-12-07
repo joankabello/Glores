@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:glores/models/activity_model.dart';
 import 'package:glores/models/destination_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_mailer/flutter_mailer.dart';
 
 class DestinationScreen extends StatefulWidget {
   final Destination destination;
@@ -192,32 +193,67 @@ class _DestinationScreenState extends State<DestinationScreen> {
                               ),
                             ),
                             _buildRatingStars(activity.rating),
-                            SizedBox(height: 10.0),
+                            SizedBox(height: MediaQuery.of(context).size.height / 380),
                             Row(
                               children: <Widget>[
                                 Container(
                                   padding: EdgeInsets.all(5.0),
-                                  width: 70.0,
+                                  width: 80,
                                   decoration: BoxDecoration(
                                     color: Theme.of(context).accentColor,
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   alignment: Alignment.center,
-                                  child: Text(
-                                    activity.startTimes[0],
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        final MailOptions mailOptions =
+                                            MailOptions(
+                                          body:
+                                              'Hello, John Doe just reserved a hotel at ${activity.startTimes[0]}',
+                                          subject: 'John Doe wants to make a reservation!',
+                                          recipients: ['joan.kabello@gmail.com'],
+                                          isHTML: true,
+                                        );
+
+                                        FlutterMailer.send(mailOptions);
+                                        print(activity.startTimes[0]);
+                                      });
+                                    },
+                                    child: Text(
+                                      activity.startTimes[0],
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(width: 10.0),
                                 Container(
                                   padding: EdgeInsets.all(5.0),
-                                  width: 70.0,
+                                  width: 80.0,
                                   decoration: BoxDecoration(
                                     color: Theme.of(context).accentColor,
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   alignment: Alignment.center,
-                                  child: Text(
-                                    activity.startTimes[1],
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        final MailOptions mailOptions =
+                                            MailOptions(
+                                          body:
+                                              'Hello, John Doe just reserved a hotel at ${activity.startTimes[1]}',
+                                          subject: 'John Doe wants to make a reservation!',
+                                          recipients: ['joan.kabello@gmail.com'],
+                                          isHTML: true,
+                                        );
+
+                                        FlutterMailer.send(mailOptions);
+                                        print(activity.startTimes[1]);
+                                      });
+                                    },
+                                    child: Text(
+                                      activity.startTimes[1],
+                                    ),
                                   ),
                                 ),
                               ],

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:glores/login.dart';
 import 'package:glores/screens/home_screen.dart';
 import 'package:glores/welcome.dart';
 import 'package:glores/home.dart';
@@ -120,6 +121,7 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                                   "fname": firstNameInputController.text,
                                   "surname": lastNameInputController.text,
                                   "email": emailInputController.text,
+                                  "business": -1
                                 })
                                 .then((result) => {
                                       Navigator.pushAndRemoveUntil(
@@ -143,7 +145,7 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                   FlatButton(
                     child: Text("Login here!"),
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(), fullscreenDialog: true));
                     },
                   )
                 ],

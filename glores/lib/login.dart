@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:glores/home.dart';
 import 'package:glores/screens/home_screen.dart';
+import 'package:glores/welcome.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -45,6 +46,7 @@ class _LoginPageState extends State<LoginPage> {
   String pwdIncorrect() {
     return 'Password is incorrect';
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,7 +104,8 @@ class _LoginPageState extends State<LoginPage> {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => HomeScreen())))
+                                            builder: (context) =>
+                                                checkRole(result))))
                                 .catchError((err) => print(err)))
                             .catchError((err) => pwdIncorrect);
                       }
@@ -118,5 +121,27 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ))));
+  }
+
+  Widget checkRole(DocumentSnapshot snapshot) {
+    if (snapshot.data == null) {
+      return Center(
+        child: Text(
+            'no data set in the userId document in firestore ${snapshot.data}'),
+      );
+    }
+    if (snapshot.data['business'] == -1) {
+      return userPage(snapshot);
+    } else {
+      return adminPage(snapshot);
+    }
+  }
+
+  HomeScreen adminPage(DocumentSnapshot snapshot) {
+    return HomeScreen();
+  }
+
+  Text userPage(DocumentSnapshot snapshot) {
+    return Text('JOAN');
   }
 }

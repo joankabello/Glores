@@ -1,6 +1,5 @@
 import 'package:glores/models/Buses.dart';
 import 'package:glores/signUpUser.dart';
-import 'package:glores/splash.dart';
 import 'package:glores/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:glores/home.dart';
