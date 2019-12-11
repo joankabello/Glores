@@ -172,10 +172,10 @@ class Profile extends State<ProfileState> {
                 setState(() {
                   Firestore.instance
                       .collection("users")
-                      .document("8u6LklyqD2dXIJmLZdWMnSacS783")
+                      .document(currentUser.uid)
                       .collection('events')
-                      .document(widget.uid).
-                      updateData({"eventState": false})
+                      .document(document.documentID)
+                      .updateData({"eventState": false, "eventAccept": false})
                       .then((result) => {
                             print("${currentUser.email}"),
                           })
@@ -189,8 +189,17 @@ class Profile extends State<ProfileState> {
               onPressed: () {
                 Navigator.of(context).pop(ConfirmAction.ACCEPT);
                 setState(() {
-                  value = false;
-                });
+                      Firestore.instance
+                      .collection("users")
+                      .document(currentUser.uid)
+                      .collection('events')
+                      .document(document.documentID)
+                      .updateData({"eventState": false, "eventAccept": true})
+                      .then((result) => {
+                            print("${currentUser.email}"),
+                          })
+                      .catchError((err) => print(err));
+                      });
               },
             )
           ],

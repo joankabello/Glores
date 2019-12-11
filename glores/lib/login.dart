@@ -6,6 +6,7 @@ import 'package:glores/screens/home_screen.dart';
 import 'package:glores/welcome.dart';
 import 'package:glores/profileBusiness.dart';
 
+
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
 
@@ -47,6 +48,8 @@ class _LoginPageState extends State<LoginPage> {
   String pwdIncorrect() {
     return 'Password is incorrect';
   }
+
+
 
   @override
   Widget build(BuildContext context) {

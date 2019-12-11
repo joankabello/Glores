@@ -231,7 +231,8 @@ class _DestinationScreenState extends State<DestinationScreen> {
                                             .add(
                                                 {
                                                 "eventTime" :"${activity.startTimes[0]}",
-                                                "eventFrom" : currentUser.email
+                                                "eventFrom" : currentUser.email,
+                                                "eventState" : true
                                                 })
                                             .then((result) => {
                                                   print("${currentUser.email}"),
@@ -240,9 +241,9 @@ class _DestinationScreenState extends State<DestinationScreen> {
                                         final MailOptions mailOptions =
                                             MailOptions(
                                           body:
-                                              'Hello, John Doe just reserved a hotel at ${activity.startTimes[0]}',
+                                              'Hello, Joan Kabello just reserved a hotel at ${activity.startTimes[0]}',
                                           subject:
-                                              'John Doe wants to make a reservation!',
+                                              'Joan Kabello wants to make a reservation!',
                                           recipients: [
                                             'joan.kabello@gmail.com'
                                           ],
@@ -276,7 +277,8 @@ class _DestinationScreenState extends State<DestinationScreen> {
                                             .add(
                                                 {
                                                 "eventTime" :"${activity.startTimes[1]}",
-                                                "eventFrom" : currentUser.email
+                                                "eventFrom" : currentUser.email,
+                                                "eventState" : true
                                                 })
                                             .then((result) => {
                                                   print("${currentUser.email}"),

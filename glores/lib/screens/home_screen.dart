@@ -5,13 +5,24 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:glores/login.dart';
 import 'package:glores/widgets/buses_carousel.dart';
 import 'package:glores/screens/buses_screen.dart';
+import 'package:easy_alert/easy_alert.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
+enum ConfirmAction { CANCEL, ACCEPT }
+
 class _HomeScreenState extends State<HomeScreen> {
+  FirebaseUser currentUser;
+
   int _selectedIndex = 0;
   int _currentTab = 0;
   List<IconData> _icons = [
@@ -23,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildPlane(BuildContext context) {
     return Container(
-        child: Text("TEST"),
+      child: Text("TEST"),
     );
   }
 
@@ -36,9 +47,12 @@ class _HomeScreenState extends State<HomeScreen> {
             print('plane');
           }
           if (_selectedIndex == 1) {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => BusesScreen(), fullscreenDialog: true));
-
-                    }
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => BusesScreen(),
+                    fullscreenDialog: true));
+          }
         });
       },
       child: Container(
@@ -95,37 +109,6 @@ class _HomeScreenState extends State<HomeScreen> {
             HotelCarousel(),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentTab,
-        onTap: (int value) {
-          setState(() {
-            _currentTab = value; 
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.search,
-              size: 30.0,
-            ),
-            title: SizedBox.shrink(),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.local_pizza,
-              size: 30.0,
-            ),
-            title: SizedBox.shrink(),
-          ),
-          BottomNavigationBarItem(
-            icon: CircleAvatar(
-              radius: 15.0,
-              backgroundImage: NetworkImage('http://i.imgur.com/zL4Krbz.jpg'),
-            ),
-            title: SizedBox.shrink(),
-          )
-        ],
       ),
     );
   }
