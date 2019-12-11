@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:glores/home.dart';
 import 'package:glores/screens/home_screen.dart';
 import 'package:glores/welcome.dart';
+import 'package:glores/profileBusiness.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -137,11 +138,11 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  HomeScreen adminPage(DocumentSnapshot snapshot) {
-    return HomeScreen();
+  ReservationsCalendar adminPage(DocumentSnapshot snapshot) {
+    return ReservationsCalendar();
   }
 
-  Text userPage(DocumentSnapshot snapshot) {
-    return Text('JOAN');
+  HomeScreen userPage(DocumentSnapshot snapshot) {
+    return HomeScreen();
   }
 }

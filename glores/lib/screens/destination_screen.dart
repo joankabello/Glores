@@ -3,17 +3,32 @@ import 'package:glores/models/activity_model.dart';
 import 'package:glores/models/destination_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DestinationScreen extends StatefulWidget {
-  final Destination destination;
+    DestinationScreen({this.destination});
 
-  DestinationScreen({this.destination});
+  final Destination destination;
+  final String uid = "8u6LklyqD2dXIJmLZdWMnSacS783"; //include this
+
 
   @override
   _DestinationScreenState createState() => _DestinationScreenState();
 }
 
 class _DestinationScreenState extends State<DestinationScreen> {
+    FirebaseUser currentUser;
+ @override
+  initState() {
+
+    this.getCurrentUser();
+    super.initState();
+  }
+
+  void getCurrentUser() async {
+    currentUser = await FirebaseAuth.instance.currentUser();
+  }
   Text _buildRatingStars(int rating) {
     String stars = '';
     for (int i = 0; i < rating; i++) {
@@ -193,7 +208,9 @@ class _DestinationScreenState extends State<DestinationScreen> {
                               ),
                             ),
                             _buildRatingStars(activity.rating),
-                            SizedBox(height: MediaQuery.of(context).size.height / 380),
+                            SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height / 380),
                             Row(
                               children: <Widget>[
                                 Container(
@@ -207,12 +224,28 @@ class _DestinationScreenState extends State<DestinationScreen> {
                                   child: GestureDetector(
                                     onTap: () {
                                       setState(() {
+                                        Firestore.instance
+                                            .collection("users")
+                                            .document("8u6LklyqD2dXIJmLZdWMnSacS783")
+                                            .collection('events')
+                                            .add(
+                                                {
+                                                "eventTime" :"${activity.startTimes[0]}",
+                                                "eventFrom" : currentUser.email
+                                                })
+                                            .then((result) => {
+                                                  print("${currentUser.email}"),
+                                                })
+                                            .catchError((err) => print(err));
                                         final MailOptions mailOptions =
                                             MailOptions(
                                           body:
                                               'Hello, John Doe just reserved a hotel at ${activity.startTimes[0]}',
-                                          subject: 'John Doe wants to make a reservation!',
-                                          recipients: ['joan.kabello@gmail.com'],
+                                          subject:
+                                              'John Doe wants to make a reservation!',
+                                          recipients: [
+                                            'joan.kabello@gmail.com'
+                                          ],
                                           isHTML: true,
                                         );
 
@@ -236,14 +269,29 @@ class _DestinationScreenState extends State<DestinationScreen> {
                                   ),
                                   alignment: Alignment.center,
                                   child: GestureDetector(
-                                    onTap: () {
+                                    onTap: () {Firestore.instance
+                                            .collection("users")
+                                            .document("8u6LklyqD2dXIJmLZdWMnSacS783")
+                                            .collection('events')
+                                            .add(
+                                                {
+                                                "eventTime" :"${activity.startTimes[1]}",
+                                                "eventFrom" : currentUser.email
+                                                })
+                                            .then((result) => {
+                                                  print("${currentUser.email}"),
+                                                })
+                                            .catchError((err) => print(err));
                                       setState(() {
                                         final MailOptions mailOptions =
                                             MailOptions(
                                           body:
                                               'Hello, John Doe just reserved a hotel at ${activity.startTimes[1]}',
-                                          subject: 'John Doe wants to make a reservation!',
-                                          recipients: ['joan.kabello@gmail.com'],
+                                          subject:
+                                              'John Doe wants to make a reservation!',
+                                          recipients: [
+                                            'joan.kabello@gmail.com'
+                                          ],
                                           isHTML: true,
                                         );
 

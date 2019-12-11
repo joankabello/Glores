@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:glores/login.dart';
+import 'package:glores/profileBusiness.dart';
 import 'package:glores/screens/home_screen.dart';
 import 'package:glores/welcome.dart';
 import 'package:glores/home.dart';
@@ -167,7 +168,7 @@ class _RegisterBusinessPageState extends State<RegisterBusinessPage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  HomeScreen()),
+                                                  ReservationsCalendar()),
                                           (_) => false),
                                       firstNameInputController.clear(),
                                       lastNameInputController.clear(),
