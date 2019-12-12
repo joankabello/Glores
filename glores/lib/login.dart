@@ -6,6 +6,7 @@ import 'package:glores/screens/home_screen.dart';
 import 'package:glores/welcome.dart';
 import 'package:glores/profileBusiness.dart';
 
+FirebaseUser currentUser;
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -141,8 +142,8 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  ReservationsCalendar adminPage(DocumentSnapshot snapshot) {
-    return ReservationsCalendar();
+  Reservations adminPage(DocumentSnapshot snapshot) {
+    return Reservations();
   }
 
   HomeScreen userPage(DocumentSnapshot snapshot) {

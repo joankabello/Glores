@@ -14,6 +14,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class HomeScreen extends StatefulWidget {
+  HomeScreen({this.uid});
+    final String uid;
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -46,13 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
           if (_selectedIndex == 0) {
             print('plane');
           }
-          if (_selectedIndex == 1) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => BusesScreen(),
-                    fullscreenDialog: true));
-          }
         });
       },
       child: Container(
@@ -78,6 +73,22 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+            appBar: AppBar(
+        title: Text("Glores", style: TextStyle(color: Colors.white),),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Log Out"),
+            textColor: Colors.white,
+            onPressed: () {
+              FirebaseAuth.instance
+                  .signOut()
+                  .then((result) =>
+                      Navigator.pushReplacementNamed(context, '/login'))
+                  .catchError((err) => print(err));
+            },
+          )
+        ],
+      ),
       body: SafeArea(
         child: ListView(
           padding: EdgeInsets.symmetric(vertical: 30.0),

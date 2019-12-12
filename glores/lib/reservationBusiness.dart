@@ -33,77 +33,77 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
     _events = {
       _selectedDay.subtract(Duration(days: 30)): [
-        'Reservation from John Doe',
-        'Reservation from John Doe',
-        'Reservation from John Doe'
+        'Reservation A1',
+        'Reservation A2',
+        'Reservation A3'
       ],
       _selectedDay.subtract(Duration(days: 27)): [
-        'Reservation from John Doe'
+        'Reservation B6'
       ],
       _selectedDay.subtract(Duration(days: 20)): [
-        'Reservation from John Doe ',
-        'Reservation from John Doe ',
-        'Reservation from John Doe ',
-        'Reservation from John Doe '
+        'Reservation  B3',
+        'Reservation  E2',
+        'Reservation  E3',
+        'Reservation  G3'
       ],
       _selectedDay.subtract(Duration(days: 16)): [
-        'Reservation from John Doe ',
-        'Reservation from John Doe '
+        'Reservation  V3',
+        'Reservation  V2'
       ],
       _selectedDay.subtract(Duration(days: 10)): [
-        'Reservation from John Doe ',
-        'Reservation from John Doe ',
-        'Reservation from John Doe '
+        'Reservation  R4',
+        'Reservation  R4',
+        'Reservation  R6'
       ],
       _selectedDay.subtract(Duration(days: 4)): [
-        'Reservation from John Doe A5',
-        'Reservation from John Doe B5',
-        'Reservation from John Doe C5'
+        'Reservation  A5',
+        'Reservation  B5',
+        'Reservation  C5'
       ],
       _selectedDay.subtract(Duration(days: 2)): [
-        'Reservation from John Doe A6',
-        'Reservation from John Doe B6'
+        'Reservation  A6',
+        'Reservation  B6'
       ],
       _selectedDay: [
-        'Reservation from John Doe A7',
-        'Reservation from John Doe B7',
-        'Reservation from John Doe C7',
-        'Reservation from John Doe D7'
+        'Reservation  A7',
+        'Reservation  B7',
+        'Reservation  C7',
+        'Reservation  D7'
       ],
       _selectedDay.add(Duration(days: 1)): [
-        'Reservation from John Doe A8',
-        'Reservation from John Doe B8',
-        'Reservation from John Doe C8',
-        'Reservation from John Doe D8'
+        'Reservation  A8',
+        'Reservation  B8',
+        'Reservation  C8',
+        'Reservation  D8'
       ],
       _selectedDay.add(Duration(days: 3)): Set.from([
-        'Reservation from John Doe A9',
-        'Reservation from John Doe A9',
-        'Reservation from John Doe B9'
+        'Reservation  A9',
+        'Reservation  A9',
+        'Reservation  B9'
       ]).toList(),
       _selectedDay.add(Duration(days: 7)): [
-        'Reservation from John Doe A10',
-        'Reservation from John Doe B10',
-        'Reservation from John Doe C10'
+        'Reservation  A10',
+        'Reservation  B10',
+        'Reservation  C10'
       ],
       _selectedDay.add(Duration(days: 11)): [
-        'Reservation from John Doe A11',
-        'Reservation from John Doe B11'
+        'Reservation  A11',
+        'Reservation  B11'
       ],
       _selectedDay.add(Duration(days: 17)): [
-        'Reservation from John Doe A12',
-        'Reservation from John Doe B12',
-        'Reservation from John Doe C12',
-        'Reservation from John Doe D12'
+        'Reservation  A12',
+        'Reservation  B12',
+        'Reservation  C12',
+        'Reservation  D12'
       ],
       _selectedDay.add(Duration(days: 22)): [
-        'Reservation from John Doe A13',
-        'Reservation from John Doe B13'
+        'Reservation  A13',
+        'Reservation  B13'
       ],
       _selectedDay.add(Duration(days: 26)): [
-        'Reservation from John Doe A14',
-        'Reservation from John Doe B14',
-        'Reservation from John Doe C14'
+        'Reservation  A14',
+        'Reservation  B14',
+        'Reservation  C14'
       ],
     };
 

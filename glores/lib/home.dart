@@ -36,17 +36,17 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: <Widget>[
-          // FlatButton(
-          //   child: Text("Log Out"),
-          //   textColor: Colors.white,
-          //   onPressed: () {
-          //     FirebaseAuth.instance
-          //         .signOut()
-          //         .then((result) =>
-          //             Navigator.pushReplacementNamed(context, "/login"))
-          //         .catchError((err) => print(err));
-          //   },
-          // )
+          FlatButton(
+            child: Text("Log Out"),
+            textColor: Colors.white,
+            onPressed: () {
+              FirebaseAuth.instance
+                  .signOut()
+                  .then((result) =>
+                      Navigator.pushReplacementNamed(context, "/login"))
+                  .catchError((err) => print(err));
+            },
+          )
         ],
       ),
       body: Center(

@@ -5,20 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_alert/easy_alert.dart';
-
-class ReservationsCalendar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Reservations(),
-    );
-  }
-}
+import 'package:flutter_mailer/flutter_mailer.dart';
 
 class Reservations extends StatefulWidget {
+  Reservations({this.uid});
+  final String uid;
   @override
   ReservationsState createState() => new ReservationsState();
 }
@@ -27,6 +18,7 @@ enum ConfirmAction { CANCEL, ACCEPT }
 
 class ReservationsState extends State<Reservations> {
   int currentTab = 0;
+  FirebaseUser currentUser;
   MyHomePage pageOne = new MyHomePage();
   ProfileState profile = new ProfileState();
   PageThree pageThree = PageThree();
@@ -97,60 +89,80 @@ class Profile extends State<ProfileState> {
   }
 
   bool value;
+
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      Hero(
-        tag: "assets/images/hotel0.jpg",
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(30.0),
-          child: Image(
-            image: AssetImage("assets/images/hotel0.jpg"),
-            fit: BoxFit.cover,
-          ),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Profile"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Log Out"),
+              textColor: Colors.white,
+              onPressed: () {
+                FirebaseAuth.instance
+                    .signOut()
+                    .then((result) =>
+                        Navigator.pushReplacementNamed(context, '/login'))
+                    .catchError((err) => print(err));
+              },
+            )
+          ],
         ),
-      ),
-      Expanded(
-          child: StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance
-            .collection("users")
-            .document("8u6LklyqD2dXIJmLZdWMnSacS783")
-            .collection('events')
-            .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return new Text('Loading...');
-            default:
-              return new ListView(
-                children:
-                    snapshot.data.documents.map((DocumentSnapshot document) {
-                  return new Visibility(
-                      visible: document['eventState'],
-                      child: Card(
-                          child: Container(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Column(
-                                children: <Widget>[
-                                  Text('You have a reservation'),
-                                  FlatButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          print('before dialog $value');
-                                          _asyncConfirmDialog(
-                                              context, document);
-                                        });
-                                      },
-                                      child: Text("See More")),
-                                ],
-                              ))));
-                }).toList(),
-              );
-          }
-        },
-      ))
-    ]);
+        body: Column(children: <Widget>[
+          Hero(
+            tag: "assets/images/hotel0.jpg",
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(30.0),
+              child: Image(
+                image: AssetImage("assets/images/hotel0.jpg"),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+            stream: Firestore.instance
+                .collection("users")
+                .document("8u6LklyqD2dXIJmLZdWMnSacS783")
+                .collection('events')
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError)
+                return new Text('Error: ${snapshot.error}');
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return new Text('Loading...');
+                default:
+                  return new ListView(
+                    children: snapshot.data.documents
+                        .map((DocumentSnapshot document) {
+                      return new Visibility(
+                          visible: document['eventState'],
+                          child: Card(
+                              child: Container(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text('You have a reservation'),
+                                      FlatButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              print('before dialog $value');
+                                              _asyncConfirmDialog(
+                                                  context, document);
+                                            });
+                                          },
+                                          child: Text("See More")),
+                                    ],
+                                  ))));
+                    }).toList(),
+                  );
+              }
+            },
+          ))
+        ]));
   }
 
   Future<ConfirmAction> _asyncConfirmDialog(
@@ -161,8 +173,8 @@ class Profile extends State<ProfileState> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('New Reservation'),
-          content:
-              Text('from ${document['eventFrom']} at ${document['eventTime']}'),
+          content: Text(
+              'from ${document['eventFrom']} in ${document['eventTime'].toString().substring(0, document['eventTime'].toString().length - 13)} at ${document['eventTime'].toString().substring(10, document['eventTime'].toString().length - 7)}'),
           actions: <Widget>[
             FlatButton(
               child: const Text('CANCEL'),
@@ -180,6 +192,15 @@ class Profile extends State<ProfileState> {
                             print("${currentUser.email}"),
                           })
                       .catchError((err) => print(err));
+                  final MailOptions mailOptions = MailOptions(
+                    body:
+                        'Hello, Your reservation in ${document['eventTime'].toString().substring(0, document['eventTime'].toString().length - 13)} at ${document['eventTime'].toString().substring(10, document['eventTime'].toString().length - 7)} was CANCELED from ${currentUser.email}',
+                    subject: 'Reservation Canceled',
+                    recipients: ['${document['eventFrom']}'],
+                    isHTML: true,
+                  );
+
+                  FlutterMailer.send(mailOptions);
                 });
                 print(value);
               },
@@ -189,7 +210,7 @@ class Profile extends State<ProfileState> {
               onPressed: () {
                 Navigator.of(context).pop(ConfirmAction.ACCEPT);
                 setState(() {
-                      Firestore.instance
+                  Firestore.instance
                       .collection("users")
                       .document(currentUser.uid)
                       .collection('events')
@@ -199,7 +220,15 @@ class Profile extends State<ProfileState> {
                             print("${currentUser.email}"),
                           })
                       .catchError((err) => print(err));
-                      });
+                    final MailOptions mailOptions = MailOptions(
+                    body:
+                        'Hello, Your reservation in ${document['eventTime'].toString().substring(0, document['eventTime'].toString().length - 13)} at ${document['eventTime'].toString().substring(10, document['eventTime'].toString().length - 7)} was ACCEPTED from ${currentUser.email}',
+                    subject: 'Reservation Accepted',
+                    recipients: ['${document['eventFrom']}'],
+                    isHTML: true,
+                  );
+                  FlutterMailer.send(mailOptions);
+                });
               },
             )
           ],

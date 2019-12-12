@@ -168,7 +168,7 @@ class _RegisterBusinessPageState extends State<RegisterBusinessPage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  ReservationsCalendar()),
+                                                  Reservations()),
                                           (_) => false),
                                       firstNameInputController.clear(),
                                       lastNameInputController.clear(),
