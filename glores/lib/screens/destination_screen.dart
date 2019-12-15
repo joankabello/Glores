@@ -8,28 +8,27 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class DestinationScreen extends StatefulWidget {
-    DestinationScreen({this.destination});
+  DestinationScreen({this.destination});
 
   final Destination destination;
   final String uid = "8u6LklyqD2dXIJmLZdWMnSacS783"; //include this
-
 
   @override
   _DestinationScreenState createState() => _DestinationScreenState();
 }
 
 class _DestinationScreenState extends State<DestinationScreen> {
-    FirebaseUser currentUser;
- @override
+  FirebaseUser currentUser;
+  @override
   initState() {
-
-    this.getCurrentUser();
+    // this.getCurrentUser();
     super.initState();
   }
 
-  void getCurrentUser() async {
-    currentUser = await FirebaseAuth.instance.currentUser();
-  }
+  // void getCurrentUser() async {
+  //   currentUser = await FirebaseAuth.instance.currentUser();
+  // }
+
   Text _buildRatingStars(int rating) {
     String stars = '';
     for (int i = 0; i < rating; i++) {
@@ -214,53 +213,6 @@ class _DestinationScreenState extends State<DestinationScreen> {
                                     MediaQuery.of(context).size.height / 380),
                             Row(
                               children: <Widget>[
-                                // Container(
-                                //   padding: EdgeInsets.all(5.0),
-                                //   width: 80,
-                                //   decoration: BoxDecoration(
-                                //     color: Theme.of(context).accentColor,
-                                //     borderRadius: BorderRadius.circular(10.0),
-                                //   ),
-                                //   alignment: Alignment.center,
-                                //   child: GestureDetector(
-                                //     onTap: () {
-                                //       setState(() {
-                                //         Firestore.instance
-                                //             .collection("users")
-                                //             .document("8u6LklyqD2dXIJmLZdWMnSacS783")
-                                //             .collection('events')
-                                //             .add(
-                                //                 {
-                                //                 "eventTime" :"${activity.startTimes[0]}",
-                                //                 "eventFrom" : currentUser.email,
-                                //                 "eventState" : true
-                                //                 })
-                                //             .then((result) => {
-                                //                   print("${currentUser.email}"),
-                                //                 })
-                                //             .catchError((err) => print(err));
-                                //         final MailOptions mailOptions =
-                                //             MailOptions(
-                                //           body:
-                                //               'Hello, Joan Kabello just reserved a hotel at ${activity.startTimes[0]}',
-                                //           subject:
-                                //               'Joan Kabello wants to make a reservation!',
-                                //           recipients: [
-                                //             'joan.kabello@gmail.com'
-                                //           ],
-                                //           isHTML: true,
-                                //         );
-
-                                //         FlutterMailer.send(mailOptions);
-                                //         print(activity.startTimes[0]);
-                                //       });
-                                //     },
-                                //     child: Text(
-                                //       activity.startTimes[0],
-                                //       overflow: TextOverflow.ellipsis,
-                                //     ),
-                                //   ),
-                                // ),
                                 Container(
                                   padding: EdgeInsets.all(5.0),
                                   width: 80,
@@ -271,75 +223,33 @@ class _DestinationScreenState extends State<DestinationScreen> {
                                   child: GestureDetector(
                                     onTap: () {
                                       DatePicker.showDateTimePicker(context,
-                                      showTitleActions: true,
-                                      minTime: DateTime(2018, 3, 5),
-                                      maxTime: DateTime(2019, 6, 7), onConfirm: (date) {
-                                      print('confirm $date');
-                                      Firestore.instance
-                                          .collection("users")
-                                          .document("8u6LklyqD2dXIJmLZdWMnSacS783")
-                                          .collection('events')
-                                          .add(
-                                          {
-                                            "eventTime" :"${date}",
-                                            "eventFrom" : currentUser.email,
-                                            "eventState" : true
-                                          })
-                                          .then((result) => {
-                                        print("${currentUser.email}"),
-                                      })
-                                          .catchError((err) => print(err));
-                                      }, currentTime: DateTime.now(), locale: LocaleType.en);
+                                          showTitleActions: true,
+                                          minTime: DateTime(2018, 3, 5),
+                                          maxTime: DateTime(2019, 6, 7),
+                                          onConfirm: (date) {
+                                        print('confirm $date');
+                                        Firestore.instance
+                                            .collection("users")
+                                            .document(
+                                                "8u6LklyqD2dXIJmLZdWMnSacS783")
+                                            .collection('events')
+                                            .add({
+                                              "eventTime": "${date}",
+                                              "eventFrom": currentUser.email,
+                                              "eventState": true
+                                            })
+                                            .then((result) => {
+                                                  print("${currentUser.email}"),
+                                                })
+                                            .catchError((err) => print(err));
+                                      },
+                                          currentTime: DateTime.now(),
+                                          locale: LocaleType.en);
                                     },
                                     child: Text("Book now"),
                                   ),
                                 ),
                                 SizedBox(width: 10.0),
-                                // Container(
-                                //   padding: EdgeInsets.all(5.0),
-                                //   width: 80.0,
-                                //   decoration: BoxDecoration(
-                                //     color: Theme.of(context).accentColor,
-                                //     borderRadius: BorderRadius.circular(10.0),
-                                //   ),
-                                //   alignment: Alignment.center,
-                                //   child: GestureDetector(
-                                //     onTap: () {Firestore.instance
-                                //             .collection("users")
-                                //             .document("8u6LklyqD2dXIJmLZdWMnSacS783")
-                                //             .collection('events')
-                                //             .add(
-                                //                 {
-                                //                 "eventTime" :"${activity.startTimes[1]}",
-                                //                 "eventFrom" : currentUser.email,
-                                //                 "eventState" : true
-                                //                 })
-                                //             .then((result) => {
-                                //                   print("${currentUser.email}"),
-                                //                 })
-                                //             .catchError((err) => print(err));
-                                //       setState(() {
-                                //         final MailOptions mailOptions =
-                                //             MailOptions(
-                                //           body:
-                                //               'Hello, John Doe just reserved a hotel at ${activity.startTimes[1]}',
-                                //           subject:
-                                //               'John Doe wants to make a reservation!',
-                                //           recipients: [
-                                //             'joan.kabello@gmail.com'
-                                //           ],
-                                //           isHTML: true,
-                                //         );
-
-                                //         FlutterMailer.send(mailOptions);
-                                //         print(activity.startTimes[1]);
-                                //       });
-                                //     },
-                                //     child: Text(
-                                //       activity.startTimes[1],
-                                //     ),
-                                //   ),
-                                // ),
                               ],
                             )
                           ],

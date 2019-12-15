@@ -19,6 +19,8 @@ class _RegisterBusinessPageState extends State<RegisterBusinessPage> {
   //   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   int _value = 0;
   final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
+    TextEditingController businessNameInputController;
+
   TextEditingController firstNameInputController;
   TextEditingController lastNameInputController;
   TextEditingController emailInputController;
@@ -27,6 +29,7 @@ class _RegisterBusinessPageState extends State<RegisterBusinessPage> {
 
   @override
   initState() {
+    businessNameInputController = TextEditingController();
     firstNameInputController = TextEditingController();
     lastNameInputController = TextEditingController();
     emailInputController = TextEditingController();
@@ -67,6 +70,16 @@ class _RegisterBusinessPageState extends State<RegisterBusinessPage> {
               key: _registerFormKey,
               child: Column(
                 children: <Widget>[
+                  TextFormField(
+                    decoration: InputDecoration(
+                        labelText: 'Business Name*', hintText: "Business Name"),
+                    controller: businessNameInputController,
+                    validator: (value) {
+                      if (value.length < 2) {
+                        return "Please enter a valid first name.";
+                      }
+                    },
+                  ),
                   TextFormField(
                     decoration: InputDecoration(
                         labelText: 'First Name*', hintText: "John"),
@@ -161,6 +174,7 @@ class _RegisterBusinessPageState extends State<RegisterBusinessPage> {
                                   "fname": firstNameInputController.text,
                                   "surname": lastNameInputController.text,
                                   "email": emailInputController.text,
+                                  "businessName": businessNameInputController.text,
                                   "bussines": _value,
                                 })
                                 .then((result) => {
@@ -170,6 +184,7 @@ class _RegisterBusinessPageState extends State<RegisterBusinessPage> {
                                               builder: (context) =>
                                                   Reservations()),
                                           (_) => false),
+                                      businessNameInputController.clear(),
                                       firstNameInputController.clear(),
                                       lastNameInputController.clear(),
                                       emailInputController.clear(),

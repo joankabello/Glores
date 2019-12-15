@@ -8,9 +8,14 @@ import 'package:glores/home.dart';
 import 'package:glores/signUpBusiness.dart';
 import 'package:glores/login.dart';
 import 'package:glores/screens/home_screen.dart';
+import 'package:flutter/foundation.dart'
+    show debugDefaultTargetPlatformOverride;
 
 
-void main() => runApp(MyApp());
+void main() {
+    debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
+    runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

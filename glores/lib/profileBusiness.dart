@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:glores/login.dart';
 import 'package:glores/reservationBusiness.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_alert/easy_alert.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
+import 'dart:async';
 
 class Reservations extends StatefulWidget {
   Reservations({this.uid});
@@ -18,7 +22,6 @@ enum ConfirmAction { CANCEL, ACCEPT }
 
 class ReservationsState extends State<Reservations> {
   int currentTab = 0;
-  FirebaseUser currentUser;
   MyHomePage pageOne = new MyHomePage();
   ProfileState profile = new ProfileState();
   PageThree pageThree = PageThree();
@@ -27,11 +30,14 @@ class ReservationsState extends State<Reservations> {
 
   @override
   void initState() {
+    this.getCurrentUser();
     super.initState();
     pages = [pageOne, profile, pageThree];
     currentPage = pageOne;
   }
-
+  void getCurrentUser() async {
+    currentUser = await FirebaseAuth.instance.currentUser();
+  }
   @override
   void dispose() {
     super.dispose();
@@ -68,33 +74,41 @@ class ReservationsState extends State<Reservations> {
 
 class ProfileState extends StatefulWidget {
   ProfileState({Key key, this.title, this.uid})
-      : super(key: key); //update this to include the uid in the constructor
+      : super(key: key);
   final String title;
-  final String uid; //include this
-
+  final String uid;
   @override
   Profile createState() => Profile();
 }
 
 class Profile extends State<ProfileState> {
-  FirebaseUser currentUser;
+
   @override
   initState() {
     this.getCurrentUser();
     super.initState();
+
   }
 
-  void getCurrentUser() async {
+  Future<String> getCurrentUser() async {
     currentUser = await FirebaseAuth.instance.currentUser();
+    print('++++++++++++++++++++++++++++++'+currentUser.uid);
+    return currentUser.uid;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   bool value;
 
   @override
   Widget build(BuildContext context) {
+    print('----------------------------'+getCurrentUser().toString());
     return Scaffold(
         appBar: AppBar(
-          title: Text("Profile"),
+          title: Text('Profile'),
           actions: <Widget>[
             FlatButton(
               child: Text("Log Out"),
@@ -124,7 +138,7 @@ class Profile extends State<ProfileState> {
               child: StreamBuilder<QuerySnapshot>(
             stream: Firestore.instance
                 .collection("users")
-                .document("8u6LklyqD2dXIJmLZdWMnSacS783")
+                .document(currentUser.uid)
                 .collection('events')
                 .snapshots(),
             builder:
