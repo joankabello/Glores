@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_rave/flutter_rave.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({this.uid});
@@ -96,8 +97,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: Column(
-
-          // padding: EdgeInsets.symmetric(vertical: 30.0),
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(left: 20.0, right: 120.0, top: 5.0),
@@ -238,8 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         "eventState": true
                                                       })
                                                       .then((result) => {
-                                                            print(
-                                                                "${currentUser.email}"),
+                                                            _pay(context),
                                                           })
                                                       .catchError(
                                                           (err) => print(err));
@@ -282,5 +280,43 @@ class _HomeScreenState extends State<HomeScreen> {
             ))
           ]),
     );
+  }
+  _pay(BuildContext context) {
+    final snackBar_onFailure = SnackBar(content: Text('Transaction failed'));
+    final snackBar_onClosed = SnackBar(content: Text('Transaction closed'));
+    final _rave = RaveCardPayment(
+      isDemo: true,
+      encKey: "f385f2a9630877d6e6c295f9",
+      publicKey: "FLWPUBK-9a4d6e5d7df7e6edf0efe5a2f2f58132-X",
+      transactionRef: "FLWSECK-f385f2a96308ec1273b401e5fca38443-X",
+      amount: 100,
+      email: "joan.kabello@gmail.com",
+      onSuccess: (response) {
+        print("$response");
+        print("Transaction Successful");
+        if (mounted) {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Transaction Sucessful!"),
+              backgroundColor: Colors.green,
+              duration: Duration(
+                seconds: 5,
+              ),
+            ),
+          );
+        }
+      },
+      onFailure: (err) {
+        print("$err");
+        print("Transaction failed");
+        Scaffold.of(context).showSnackBar(snackBar_onFailure);
+      },
+      onClosed: () {
+        print("Transaction closed");
+        Scaffold.of(context).showSnackBar(snackBar_onClosed);
+      },
+      context: context,
+    );
+    _rave.process();
   }
 }

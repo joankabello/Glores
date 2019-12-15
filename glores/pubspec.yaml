@@ -32,6 +32,7 @@ dependencies:
   firebase_messaging: ^5.0.1+1
   fluttertoast: ^3.1.0
   flutter_datetime_picker: ^1.2.8
+  flutter_rave: ^0.0.5
 
 
   # The following adds the Cupertino Icons font to your application.
