@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:calendar_view_widget/calendar_view_widget.dart';
+import 'dart:async';
 
 final Map<DateTime, List> _holidays = {
   DateTime(2019, 1, 1): ['New Year\'s Day'],
@@ -19,336 +21,145 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  Map<DateTime, List> _events;
-  List _selectedEvents;
-  AnimationController _animationController;
-  CalendarController _calendarController;
-  @override
-  void initState() {
-    super.initState();
-    initializeDateFormatting();
+class _MyHomePageState extends State<MyHomePage> {
 
-    final _selectedDay = DateTime.now();
-
-    _events = {
-      _selectedDay.subtract(Duration(days: 30)): [
-        'Reservation A1',
-        'Reservation A2',
-        'Reservation A3'
-      ],
-      _selectedDay.subtract(Duration(days: 27)): [
-        'Reservation B6'
-      ],
-      _selectedDay.subtract(Duration(days: 20)): [
-        'Reservation  B3',
-        'Reservation  E2',
-        'Reservation  E3',
-        'Reservation  G3'
-      ],
-      _selectedDay.subtract(Duration(days: 16)): [
-        'Reservation  V3',
-        'Reservation  V2'
-      ],
-      _selectedDay.subtract(Duration(days: 10)): [
-        'Reservation  R4',
-        'Reservation  R4',
-        'Reservation  R6'
-      ],
-      _selectedDay.subtract(Duration(days: 4)): [
-        'Reservation  A5',
-        'Reservation  B5',
-        'Reservation  C5'
-      ],
-      _selectedDay.subtract(Duration(days: 2)): [
-        'Reservation  A6',
-        'Reservation  B6'
-      ],
-      _selectedDay: [
-        'Reservation  A7',
-        'Reservation  B7',
-        'Reservation  C7',
-        'Reservation  D7'
-      ],
-      _selectedDay.add(Duration(days: 1)): [
-        'Reservation  A8',
-        'Reservation  B8',
-        'Reservation  C8',
-        'Reservation  D8'
-      ],
-      _selectedDay.add(Duration(days: 3)): Set.from([
-        'Reservation  A9',
-        'Reservation  A9',
-        'Reservation  B9'
-      ]).toList(),
-      _selectedDay.add(Duration(days: 7)): [
-        'Reservation  A10',
-        'Reservation  B10',
-        'Reservation  C10'
-      ],
-      _selectedDay.add(Duration(days: 11)): [
-        'Reservation  A11',
-        'Reservation  B11'
-      ],
-      _selectedDay.add(Duration(days: 17)): [
-        'Reservation  A12',
-        'Reservation  B12',
-        'Reservation  C12',
-        'Reservation  D12'
-      ],
-      _selectedDay.add(Duration(days: 22)): [
-        'Reservation  A13',
-        'Reservation  B13'
-      ],
-      _selectedDay.add(Duration(days: 26)): [
-        'Reservation  A14',
-        'Reservation  B14',
-        'Reservation  C14'
-      ],
-    };
-
-    _selectedEvents = _events[_selectedDay] ?? [];
-    _calendarController = CalendarController();
-
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-
-    _animationController.forward();
-  }
+  StreamController<List<Map<String, String>>> eventsController =
+      new StreamController();
 
   @override
   void dispose() {
-    _animationController.dispose();
-    _calendarController.dispose();
+    eventsController.close();
     super.dispose();
-  }
-
-  void _onDaySelected(DateTime day, List events) {
-    print('CALLBACK: _onDaySelected');
-    setState(() {
-      _selectedEvents = events;
-    });
-  }
-
-  void _onVisibleDaysChanged(
-      DateTime first, DateTime last, CalendarFormat format) {
-    print('CALLBACK: _onVisibleDaysChanged');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Reservations"),
-      ),
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          _buildButtons(),
-          _buildTableCalendarWithBuilders(),
-          const SizedBox(height: 8.0),
-          // _buildButtons(),
-          const SizedBox(height: 8.0),
-          Expanded(child: _buildEventList()),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTableCalendarWithBuilders() {
-    return TableCalendar(
-      locale: 'en_EN',
-      calendarController: _calendarController,
-      events: _events,
-      holidays: _holidays,
-      initialCalendarFormat: CalendarFormat.month,
-      formatAnimation: FormatAnimation.slide,
-      startingDayOfWeek: StartingDayOfWeek.sunday,
-      availableGestures: AvailableGestures.all,
-      availableCalendarFormats: const {
-        CalendarFormat.month: '',
-        CalendarFormat.week: '',
+    const eventList = [
+      {
+        'name': 'Event (null location)',
+        'location': null,
+        'date': '2019-09-27 13:27:00',
+        'id': '1',
       },
-      calendarStyle: CalendarStyle(
-        outsideDaysVisible: false,
-        weekendStyle: TextStyle().copyWith(color: Colors.blue[800]),
-        holidayStyle: TextStyle().copyWith(color: Colors.blue[800]),
-      ),
-      daysOfWeekStyle: DaysOfWeekStyle(
-        weekendStyle: TextStyle().copyWith(color: Colors.blue[600]),
-      ),
-      headerStyle: HeaderStyle(
-        centerHeaderTitle: true,
-        formatButtonVisible: false,
-      ),
-      builders: CalendarBuilders(
-        selectedDayBuilder: (context, date, _) {
-          return FadeTransition(
-            opacity: Tween(begin: 0.0, end: 1.0).animate(_animationController),
-            child: Container(
-              margin: const EdgeInsets.all(4.0),
-              padding: const EdgeInsets.only(top: 5.0, left: 6.0),
-              color: Colors.deepOrange[300],
-              width: 100,
-              height: 100,
-              child: Text(
-                '${date.day}',
-                style: TextStyle().copyWith(fontSize: 16.0),
-              ),
-            ),
-          );
-        },
-        todayDayBuilder: (context, date, _) {
-          return Container(
-            margin: const EdgeInsets.all(4.0),
-            padding: const EdgeInsets.only(top: 5.0, left: 6.0),
-            color: Colors.amber[400],
-            width: 100,
-            height: 100,
-            child: Text(
-              '${date.day}',
-              style: TextStyle().copyWith(fontSize: 16.0),
-            ),
-          );
-        },
-        markersBuilder: (context, date, events, holidays) {
-          final children = <Widget>[];
-
-          if (events.isNotEmpty) {
-            children.add(
-              Positioned(
-                right: 1,
-                bottom: 1,
-                child: _buildEventsMarker(date, events),
-              ),
-            );
-          }
-          if (holidays.isNotEmpty) {
-            children.add(
-              Positioned(
-                right: -2,
-                top: -2,
-                child: _buildHolidaysMarker(),
-              ),
-            );
-          }
-          return children;
-        },
-      ),
-      onDaySelected: (date, events) {
-        _onDaySelected(date, events);
-        _animationController.forward(from: 0.0);
+      {
+        'name': null,
+        'location': 'Suite 501',
+        'date': '2019-09-21 14:35:00',
+        'id': '2',
       },
-      onVisibleDaysChanged: _onVisibleDaysChanged,
-    );
-  }
+      {
+        'name': 'Event null date',
+        'location': '1200 Park Avenue',
+        'date': null,
+        'id': '3',
+      },
+      {
+        'name': 'Event null id',
+        'location': 'Grand Ballroom',
+        'date': '2019-08-27 13:27:00',
+        'id': null,
+      },
+      {
+        'name': 'Event 4',
+        'location': 'Grand Ballroom',
+        'date': '2019-08-27 13:27:00',
+        'id': '4',
+      },
+      {
+        'name': 'Event 5',
+        'location': 'Suite 501',
+        'date': '2019-10-21 14:35:00z',
+        'id': '5',
+      },
+      {
+        'name': 'Event 6',
+        'location': '1200 Park Avenue',
+        'date': '2019-08-22 05:49:00',
+        'id': '6',
+      },
+      {
+        'name':
+            'Handle really long names in the event list so it does not break',
+        'location': '1200 Park Avenue',
+        'date': '2019-10-24 05:49:00',
+        'id': '7',
+      },
+      {
+        'name': 'Event 8',
+        'location':
+            'Handle really long locations in the event list so it does not break',
+        'date': '2019-10-24 05:49:00z',
+        'id': '8',
+      },
+    ];
 
-  Widget _buildEventsMarker(DateTime date, List events) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      decoration: BoxDecoration(
-        shape: BoxShape.rectangle,
-        color: _calendarController.isSelected(date)
-            ? Colors.brown[500]
-            : _calendarController.isToday(date)
-                ? Colors.brown[300]
-                : Colors.blue[400],
-      ),
-      width: 16.0,
-      height: 16.0,
-      child: Center(
-        child: Text(
-          '${events.length}',
-          style: TextStyle().copyWith(
-            color: Colors.white,
-            fontSize: 12.0,
+    final theme = ThemeData.dark().copyWith(
+      primaryColor: Colors.grey,
+      accentColor: Colors.lightBlue,
+      canvasColor: Colors.white,
+      backgroundColor: Colors.lightBlue,
+      dividerColor: Colors.blueGrey,
+      textTheme: ThemeData.dark().textTheme.copyWith(
+            display1: TextStyle(
+              fontSize: 21.0,
+            ),
+            subhead: TextStyle(
+              fontSize: 14.0,
+              color: Colors.blueGrey,
+            ),
+            headline: TextStyle(
+              fontSize: 18.0,
+              color: Colors.blueGrey,
+              fontWeight: FontWeight.bold,
+            ),
+            title: TextStyle(
+              fontSize: 14.0,
+              color: Colors.blueGrey,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
+      accentTextTheme: ThemeData.dark().accentTextTheme.copyWith(
+            body1: TextStyle(
+              fontSize: 14.0,
+              color: Colors.black,
+            ),
+            title: TextStyle(
+              fontSize: 21.0,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+            display1: TextStyle(
+              fontSize: 21.0,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+    );
+
+    void onEventTapped(Map<String, String> event) {
+      print(event);
+    }
+    eventsController.add(eventList);
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('Reservations'),
       ),
-    );
-  }
-
-  Widget _buildHolidaysMarker() {
-    return Icon(
-      Icons.add_box,
-      size: 20.0,
-      color: Colors.blueGrey[800],
-    );
-  }
-
-  Widget _buildButtons() {
-    final dateTime = _events.keys.elementAt(_events.length - 2);
-
-    return Column(
-      children: <Widget>[
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: new Center(
+        child: new Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            RaisedButton(
-              color: Colors.white,
-              child: Text('Month'),
-              onPressed: () {
-                setState(() {
-                  _calendarController.setCalendarFormat(CalendarFormat.month);
-                });
-              },
-            ),
-            RaisedButton(
-              color: Colors.white,
-              child: Text('2 weeks'),
-              onPressed: () {
-                setState(() {
-                  _calendarController
-                      .setCalendarFormat(CalendarFormat.twoWeeks);
-                });
-              },
-            ),
-            RaisedButton(
-              color: Colors.white,
-              child: Text('Week'),
-              onPressed: () {
-                setState(() {
-                  _calendarController.setCalendarFormat(CalendarFormat.week);
-                });
-              },
+            new CalendarView(
+              eventStream: eventsController.stream,
+              onEventTapped: onEventTapped,
+              titleField: 'name',
+              detailField: 'location',
+              dateField: 'date',
+              separatorTitle: 'Events',
+              theme: theme,
             ),
           ],
         ),
-        const SizedBox(height: 8.0),
-        RaisedButton(
-          color: Colors.white,
-          child: Text(
-              'Set day ${dateTime.day}-${dateTime.month}-${dateTime.year}'),
-          onPressed: () {
-            _calendarController.setSelectedDay(
-              DateTime(dateTime.year, dateTime.month, dateTime.day),
-              runCallback: true,
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildEventList() {
-    return ListView(
-      children: _selectedEvents
-          .map((event) => Container(
-                decoration: BoxDecoration(
-                  border: Border.all(width: 0.8),
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                child: ListTile(
-                  title: Text(event.toString()),
-                  onTap: () => print('$event tapped!'),
-                ),
-              ))
-          .toList(),
+      ),
     );
   }
 }
