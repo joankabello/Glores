@@ -151,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
     return Reservations();
   }
 
-  HomeScreen userPage(DocumentSnapshot snapshot) {
-    return HomeScreen();
+  NavBar userPage(DocumentSnapshot snapshot) {
+    return NavBar();
   }
 }

@@ -128,7 +128,7 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  HomeScreen()),
+                                                  NavBar()),
                                           (_) => false),
                                       firstNameInputController.clear(),
                                       lastNameInputController.clear(),

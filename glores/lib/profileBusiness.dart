@@ -21,12 +21,12 @@ class Reservations extends StatefulWidget {
 enum ConfirmAction { CANCEL, ACCEPT }
 
 class ReservationsState extends State<Reservations> {
-  int currentTab = 0;
-  MyHomePage pageOne = new MyHomePage();
-  ProfileState profile = new ProfileState();
-  PageThree pageThree = PageThree();
-  List<Widget> pages;
-  Widget currentPage;
+    int currentTab = 0;
+    MyHomePage pageOne = new MyHomePage();
+    ProfileState profile = new ProfileState();
+    PageThree pageThree = PageThree();
+    List<Widget> pages;
+    Widget currentPage;
 
   @override
   void initState() {
@@ -206,6 +206,15 @@ class Profile extends State<ProfileState> {
                             print("${currentUser.email}"),
                           })
                       .catchError((err) => print(err));
+                  Firestore.instance
+                      .collection("users")
+                      .document(document["uidFrom"])
+                      .collection('events')
+                      .add({"eventAnswer": true, "eventAccept": false, 'businessFrom': document['businessFrom']})
+                      .then((result) => {
+                            print("${currentUser.email}"),
+                          })
+                      .catchError((err) => print(err));
                   final MailOptions mailOptions = MailOptions(
                     body:
                         'Hello, Your reservation in ${document['eventTime'].toString().substring(0, document['eventTime'].toString().length - 13)} at ${document['eventTime'].toString().substring(10, document['eventTime'].toString().length - 7)} was CANCELED from ${currentUser.email}',
@@ -230,6 +239,15 @@ class Profile extends State<ProfileState> {
                       .collection('events')
                       .document(document.documentID)
                       .updateData({"eventState": false, "eventAccept": true})
+                      .then((result) => {
+                            print("${currentUser.email}"),
+                          })
+                      .catchError((err) => print(err));
+                  Firestore.instance
+                      .collection("users")
+                      .document(document["uidFrom"])
+                      .collection('events')
+                      .add({"eventAnswer": true, "eventAccept": true, 'businessFrom': document['businessFrom']})
                       .then((result) => {
                             print("${currentUser.email}"),
                           })
