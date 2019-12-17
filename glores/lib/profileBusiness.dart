@@ -21,23 +21,25 @@ class Reservations extends StatefulWidget {
 enum ConfirmAction { CANCEL, ACCEPT }
 
 class ReservationsState extends State<Reservations> {
-    int currentTab = 0;
-    MyHomePage pageOne = new MyHomePage();
-    ProfileState profile = new ProfileState();
-    PageThree pageThree = PageThree();
-    List<Widget> pages;
-    Widget currentPage;
+  int currentTab = 2;
+  MyHomePage pageOne = new MyHomePage();
+  ProfileState profile = new ProfileState();
+  PageThree pageThree = PageThree();
+  List<Widget> pages;
+  Widget currentPage;
+  Future<String> getCurrentUser() async {
+    currentUser = await FirebaseAuth.instance.currentUser();
+    return currentUser.uid;
+  }
 
   @override
   void initState() {
     this.getCurrentUser();
     super.initState();
     pages = [pageOne, profile, pageThree];
-    currentPage = pageOne;
+    currentPage = pageThree;
   }
-  void getCurrentUser() async {
-    currentUser = await FirebaseAuth.instance.currentUser();
-  }
+
   @override
   void dispose() {
     super.dispose();
@@ -61,7 +63,7 @@ class ReservationsState extends State<Reservations> {
         new BottomNavigationBarItem(
             icon: new Icon(Icons.person), title: new Text("Profile")),
         new BottomNavigationBarItem(
-            icon: new Icon(Icons.chat), title: new Text("Chat"))
+            icon: new Icon(Icons.chat), title: new Text("Inbox"))
       ],
     );
 
@@ -73,8 +75,7 @@ class ReservationsState extends State<Reservations> {
 }
 
 class ProfileState extends StatefulWidget {
-  ProfileState({Key key, this.title, this.uid})
-      : super(key: key);
+  ProfileState({Key key, this.title, this.uid}) : super(key: key);
   final String title;
   final String uid;
   @override
@@ -82,17 +83,15 @@ class ProfileState extends StatefulWidget {
 }
 
 class Profile extends State<ProfileState> {
-
   @override
   initState() {
     this.getCurrentUser();
     super.initState();
-
   }
 
   Future<String> getCurrentUser() async {
     currentUser = await FirebaseAuth.instance.currentUser();
-    print('++++++++++++++++++++++++++++++'+currentUser.uid);
+    print('++++++++++++++++++++++++++++++' + currentUser.uid);
     return currentUser.uid;
   }
 
@@ -105,10 +104,10 @@ class Profile extends State<ProfileState> {
 
   @override
   Widget build(BuildContext context) {
-    print('----------------------------'+getCurrentUser().toString());
+    print('----------------------------' + getCurrentUser().toString());
     return Scaffold(
         appBar: AppBar(
-          title: Text('Profile'),
+          title: Text('Profile', style: TextStyle(color: Colors.white),),
           actions: <Widget>[
             FlatButton(
               child: Text("Log Out"),
@@ -153,7 +152,7 @@ class Profile extends State<ProfileState> {
                     children: snapshot.data.documents
                         .map((DocumentSnapshot document) {
                       return new Visibility(
-                          visible: document['eventState'],
+                          visible: document['eventState'] == null ? false : document['eventState'],
                           child: Card(
                               child: Container(
                                   padding: const EdgeInsets.only(top: 5.0),
@@ -210,7 +209,11 @@ class Profile extends State<ProfileState> {
                       .collection("users")
                       .document(document["uidFrom"])
                       .collection('events')
-                      .add({"eventAnswer": true, "eventAccept": false, 'businessFrom': document['businessFrom']})
+                      .add({
+                        "eventAnswer": true,
+                        "eventAccept": false,
+                        'businessFrom': document['businessFrom']
+                      })
                       .then((result) => {
                             print("${currentUser.email}"),
                           })
@@ -247,12 +250,16 @@ class Profile extends State<ProfileState> {
                       .collection("users")
                       .document(document["uidFrom"])
                       .collection('events')
-                      .add({"eventAnswer": true, "eventAccept": true, 'businessFrom': document['businessFrom']})
+                      .add({
+                        "eventAnswer": true,
+                        "eventAccept": true,
+                        'businessFrom': document['businessFrom']
+                      })
                       .then((result) => {
                             print("${currentUser.email}"),
                           })
                       .catchError((err) => print(err));
-                    final MailOptions mailOptions = MailOptions(
+                  final MailOptions mailOptions = MailOptions(
                     body:
                         'Hello, Your reservation in ${document['eventTime'].toString().substring(0, document['eventTime'].toString().length - 13)} at ${document['eventTime'].toString().substring(10, document['eventTime'].toString().length - 7)} was ACCEPTED from ${currentUser.email}',
                     subject: 'Reservation Accepted',
@@ -273,6 +280,24 @@ class Profile extends State<ProfileState> {
 class PageThree extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new Center(child: new Text("Page three"));
+    return new Scaffold(
+        appBar: AppBar(
+          title: Text('Inbox', style: TextStyle(color: Colors.white),),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Log Out"),
+              textColor: Colors.white,
+              onPressed: () {
+                FirebaseAuth.instance
+                    .signOut()
+                    .then((result) =>
+                        Navigator.pushReplacementNamed(context, '/login'))
+                    .catchError((err) => print(err));
+              },
+            )
+          ],
+        ),
+        body: new Center(child: new Text("Coming Soon ...")),
+    );
   }
 }

@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:glores/login.dart';
 import 'package:calendar_view_widget/calendar_view_widget.dart';
 import 'dart:async';
-
+import 'package:firebase_auth/firebase_auth.dart';
+ 
 final Map<DateTime, List> _holidays = {
   DateTime(2019, 1, 1): ['New Year\'s Day'],
   DateTime(2019, 1, 6): ['Epiphany'],
@@ -11,88 +12,61 @@ final Map<DateTime, List> _holidays = {
   DateTime(2019, 4, 21): ['Easter Sunday'],
   DateTime(2019, 4, 22): ['Easter Monday'],
 };
-
+ 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key, this.title, this.uid}) : super(key: key);
+   final String uid;
 
   final String title;
-
+ 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
-
+ 
 class _MyHomePageState extends State<MyHomePage> {
-
+ 
   StreamController<List<Map<String, String>>> eventsController =
       new StreamController();
+ 
+  @override
+  initState() {
+    this.getCurrentUser();
+    super.initState();
+
+  }
+
+  Future getCurrentUser() async {
+    currentUser = await FirebaseAuth.instance.currentUser();
+    print('++++++++++++++++++++++++++++++'+currentUser.uid);
+    return currentUser.uid;
+  }
 
   @override
   void dispose() {
     eventsController.close();
     super.dispose();
   }
-
+ 
   @override
   Widget build(BuildContext context) {
-    const eventList = [
-      {
-        'name': 'Event (null location)',
-        'location': null,
-        'date': '2019-09-27 13:27:00',
-        'id': '1',
-      },
-      {
-        'name': null,
-        'location': 'Suite 501',
-        'date': '2019-09-21 14:35:00',
-        'id': '2',
-      },
-      {
-        'name': 'Event null date',
-        'location': '1200 Park Avenue',
-        'date': null,
-        'id': '3',
-      },
-      {
-        'name': 'Event null id',
-        'location': 'Grand Ballroom',
-        'date': '2019-08-27 13:27:00',
-        'id': null,
-      },
-      {
-        'name': 'Event 4',
-        'location': 'Grand Ballroom',
-        'date': '2019-08-27 13:27:00',
-        'id': '4',
-      },
-      {
-        'name': 'Event 5',
-        'location': 'Suite 501',
-        'date': '2019-10-21 14:35:00z',
-        'id': '5',
-      },
-      {
-        'name': 'Event 6',
-        'location': '1200 Park Avenue',
-        'date': '2019-08-22 05:49:00',
-        'id': '6',
-      },
-      {
-        'name':
-            'Handle really long names in the event list so it does not break',
-        'location': '1200 Park Avenue',
-        'date': '2019-10-24 05:49:00',
-        'id': '7',
-      },
-      {
-        'name': 'Event 8',
-        'location':
-            'Handle really long locations in the event list so it does not break',
-        'date': '2019-10-24 05:49:00z',
-        'id': '8',
-      },
-    ];
-
+    Firestore.instance
+        .collection("users")
+        .document(currentUser.uid)
+        .collection('events')
+        .getDocuments()
+        .then((QuerySnapshot sn) {
+          var l = new List();
+          List<DocumentSnapshot> templist;
+          List<Map<String, String>> list = new List();
+ 
+          templist = sn.documents;
+          list = templist.map((DocumentSnapshot docSnapshot){
+            Map<String, String> x = docSnapshot.data.cast<String, String>();
+            return x;
+            }).toList();
+          eventsController.add(list);
+    });
+ 
     final theme = ThemeData.dark().copyWith(
       primaryColor: Colors.grey,
       accentColor: Colors.lightBlue,
@@ -135,14 +109,14 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
     );
-
+ 
     void onEventTapped(Map<String, String> event) {
       print(event);
     }
-    eventsController.add(eventList);
+//    eventsController.add(eventList);
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Reservations'),
+        title: new Text('Reservations',style: TextStyle(color: Colors.white),),
       ),
       body: new Center(
         child: new Column(
@@ -151,9 +125,9 @@ class _MyHomePageState extends State<MyHomePage> {
             new CalendarView(
               eventStream: eventsController.stream,
               onEventTapped: onEventTapped,
-              titleField: 'name',
-              detailField: 'location',
-              dateField: 'date',
+              titleField: 'eventFrom',
+              // detailField: 'eventAnswer',
+              dateField: 'eventTime',
               separatorTitle: 'Events',
               theme: theme,
             ),
