@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Login"),
+          title: Text("Sign In"),
         ),
         body: Container(
             padding: const EdgeInsets.all(20.0),
@@ -70,6 +70,7 @@ class _LoginPageState extends State<LoginPage> {
               key: _loginFormKey,
               child: Column(
                 children: <Widget>[
+                Image.asset('assets/images/logo.png', width: MediaQuery.of(context).size.width / 2, height: MediaQuery.of(context).size.height / 2,),
                   TextFormField(
                     maxLines: 1,
                     decoration: InputDecoration(
@@ -97,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                     validator: pwdValidator,
                   ),
                   RaisedButton(
-                    child: Text("Login"),
+                    child: Text("Sign In"),
                     color: Theme.of(context).primaryColor,
                     textColor: Colors.white,
                     onPressed: () {
@@ -123,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Text("Don't have an account yet?"),
                   FlatButton(
-                    child: Text("Register here!"),
+                    child: Text("Register here!", style: TextStyle(color: Theme.of(context).primaryColor),),
                     onPressed: () {
                       Navigator.pushNamed(context, '/welcome');
                     },

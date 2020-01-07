@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title, this.uid}) : super(key: key); //update this to include the uid in the constructor
+  HomePage({Key key, this.title, this.uid}) : super(key: key);
   final String title;
   final String uid; //include this
 

@@ -12,30 +12,46 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My firebase app'),
+        title: Text(
+          'Glores',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          RaisedButton(
-            onPressed: navigateToRegisteUser,
-            child: Text('Customer'),
+          Image.asset('assets/images/logo.png', width: MediaQuery.of(context).size.width / 2, height: MediaQuery.of(context).size.height / 2,),
+          Center(
+            child: RaisedButton(
+              color: Theme.of(context).primaryColor,
+              textColor: Colors.white,
+              onPressed: navigateToRegisteUser,
+              child: Text('Register as Customer'),
+            ),
           ),
           RaisedButton(
+            color: Theme.of(context).primaryColor,
+            textColor: Colors.white,
             onPressed: navigateToRegisterBusiness,
-            child: Text('Business Owner'),
+            child: Text('Register as Business'),
           ),
         ],
       ),
     );
   }
 
-  void navigateToRegisteUser(){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterUserPage(), fullscreenDialog: true));
+  void navigateToRegisteUser() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => RegisterUserPage(), fullscreenDialog: true));
   }
 
-  void navigateToRegisterBusiness(){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterBusinessPage(), fullscreenDialog: true));
+  void navigateToRegisterBusiness() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => RegisterBusinessPage(),
+            fullscreenDialog: true));
   }
 }
