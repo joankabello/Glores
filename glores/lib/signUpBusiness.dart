@@ -7,6 +7,11 @@ import 'package:glores/screens/home_screen.dart';
 import 'package:glores/welcome.dart';
 import 'package:glores/home.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:async';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class RegisterBusinessPage extends StatefulWidget {
   RegisterBusinessPage({Key key}) : super(key: key);
@@ -56,6 +61,16 @@ class _RegisterBusinessPageState extends State<RegisterBusinessPage> {
       return null;
     }
   }
+
+  Future<File> uploadPic(fname) async{
+    FirebaseStorage _storage = FirebaseStorage.instance;
+
+    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    String fileName = basename(image.path);
+    StorageReference reference = _storage.ref().child("$fname/$fileName");
+    //Upload the file to firebase 
+    reference.putFile(image);
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +127,17 @@ class _RegisterBusinessPageState extends State<RegisterBusinessPage> {
                     controller: pwdInputController,
                     obscureText: true,
                     validator: pwdValidator,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(11.0),
+                  ),
+                  RaisedButton(
+                    child: Text("Upload a photo of your bussines"),
+                    color: Theme.of(context).primaryColor,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      uploadPic(emailInputController.text);
+                    },
                   ),
                   Padding(
                     padding: EdgeInsets.all(11.0),
