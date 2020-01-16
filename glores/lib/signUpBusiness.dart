@@ -67,7 +67,7 @@ class _RegisterBusinessPageState extends State<RegisterBusinessPage> {
 
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
     String fileName = basename(image.path);
-    StorageReference reference = _storage.ref().child("$fname/$fileName");
+    StorageReference reference = _storage.ref().child("$fname/profile");
     //Upload the file to firebase 
     reference.putFile(image);
     }

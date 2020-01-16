@@ -10,6 +10,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_alert/easy_alert.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
 import 'dart:async';
+import 'package:firebase_storage/firebase_storage.dart';
+
 
 class Reservations extends StatefulWidget {
   Reservations({this.uid});
@@ -83,11 +85,16 @@ class ProfileState extends StatefulWidget {
 }
 
 class Profile extends State<ProfileState> {
+  String _imageUrl; 
   @override
   initState() {
     this.getCurrentUser();
     super.initState();
-  }
+
+     var ref = FirebaseStorage.instance.ref().child("${currentUser.email}/profile");
+     ref.getDownloadURL().then((loc) => setState(() => _imageUrl = loc));
+
+     }
 
   Future<String> getCurrentUser() async {
     currentUser = await FirebaseAuth.instance.currentUser();
@@ -127,10 +134,12 @@ class Profile extends State<ProfileState> {
             tag: "assets/images/hotel0.jpg",
             child: ClipRRect(
               borderRadius: BorderRadius.circular(30.0),
-              child: Image(
-                image: AssetImage("assets/images/hotel0.jpg"),
-                fit: BoxFit.cover,
-              ),
+              child: _imageUrl == null ? Image.asset('assets/images/hotel0.jpg')
+                :Image.network(_imageUrl,fit: BoxFit.cover,)
+              // child: Image(
+              //   image: AssetImage("assets/images/hotel0.jpg"),
+              //   fit: BoxFit.cover,
+              // ),
             ),
           ),
           Expanded(
