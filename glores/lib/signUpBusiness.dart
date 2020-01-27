@@ -62,6 +62,14 @@ class _RegisterBusinessPageState extends State<RegisterBusinessPage> {
     }
   }
 
+    String businessNameValidator(String value) {
+    if (value.length < 2) {
+      return 'Please add a valid Business Name';
+    } else {
+      return null;
+    }
+  }
+
   Future<File> uploadPic(fname) async{
     FirebaseStorage _storage = FirebaseStorage.instance;
 
@@ -89,11 +97,7 @@ class _RegisterBusinessPageState extends State<RegisterBusinessPage> {
                     decoration: InputDecoration(
                         labelText: 'Business Name*', hintText: "Business Name"),
                     controller: businessNameInputController,
-                    validator: (value) {
-                      if (value.length < 2) {
-                        return "Please enter a valid first name.";
-                      }
-                    },
+                    validator: businessNameValidator,
                   ),
                   TextFormField(
                     decoration: InputDecoration(
